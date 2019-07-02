@@ -1,0 +1,29 @@
+# IDE
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Venv
+venv/
+.venv/
+
+# Pipenv
+# Dependency should be managed by setup.py
+Pipfile
+Pipfile.lock
+
+# Pip
+build/
+dist/
+*.egg-info/
+
+# PyTest
+.eggs/
+.pytest_cache/
+.coverage
+.makemigrations
+
+# macOS
+.DS_Store
