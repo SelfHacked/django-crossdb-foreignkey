@@ -27,3 +27,6 @@ dist/
 
 # macOS
 .DS_Store
+
+# Environment files
+.env

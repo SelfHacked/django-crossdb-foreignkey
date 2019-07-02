@@ -8,6 +8,7 @@ extra_test = [
     'pytest-runner>=4',
     'pytest-cov>=2',
     'pytest-django>=3',
+    'psycopg2',
 ]
 extra_dev = extra_test
 
