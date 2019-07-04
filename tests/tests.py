@@ -1,5 +1,5 @@
 from django.test import TestCase
-from example_models.models import SimpleModel
+from example_models.models import Department
 
 
 class SimpleModelTest(TestCase):
@@ -9,7 +9,7 @@ class SimpleModelTest(TestCase):
     def test_ok(self):
         """Creation is logged correctly."""
         # Get the object to work with
-        model = SimpleModel()
-        model.save()
+        department = Department()
+        department.save()
 
-        assert model.pk
+        assert department.pk
