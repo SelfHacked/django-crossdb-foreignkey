@@ -1,5 +1,7 @@
 from django.test import TestCase
-from example_models.models import Department, OtherEmployee, OtherManager
+from example_models.models import (
+    Department, OtherEmployee, OtherManager, OtherSection,
+)
 
 
 class SimpleModelTest(TestCase):
@@ -27,6 +29,10 @@ class SimpleModelTest(TestCase):
             department=self._department_1,
         )
         self._manager.save()
+
+        self._section = OtherSection(
+            department=self._department_1,
+        )
 
         self._department_2 = Department(code='K002')
         self._department_2.save()
@@ -80,3 +86,10 @@ class SimpleModelTest(TestCase):
         managers = OtherManager.objects.all()
 
         self.assertIn(self._manager, managers)
+
+    def test_delete_with_no_reverse(self):
+        """Test delete."""
+        self._department_1.delete()
+        sections = OtherSection.objects.all()
+
+        self.assertNotIn(self._section, sections)

@@ -22,3 +22,12 @@ class OtherManager(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='manager'
     )
+
+
+class OtherSection(models.Model):
+    name = models.TextField()
+    department = CrossDBOneToOneField(
+        'example_models.Department',
+        on_delete=models.CASCADE,
+        related_name='+'
+    )
