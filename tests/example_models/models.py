@@ -19,6 +19,6 @@ class OtherManager(models.Model):
     name = models.TextField()
     department = CrossDBOneToOneField(
         Department,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         related_name='manager'
     )
