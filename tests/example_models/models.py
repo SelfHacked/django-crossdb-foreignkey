@@ -11,7 +11,7 @@ class OtherEmployee(models.Model):
     department = CrossDBForeignKey(
         Department,
         on_delete=models.CASCADE,
-        related_name='employees'
+        related_name='employees',
     )
 
 
@@ -20,7 +20,7 @@ class OtherManager(models.Model):
     department = CrossDBOneToOneField(
         Department,
         on_delete=models.DO_NOTHING,
-        related_name='manager'
+        related_name='manager',
     )
 
 
@@ -29,5 +29,14 @@ class OtherSection(models.Model):
     department = CrossDBOneToOneField(
         'example_models.Department',
         on_delete=models.CASCADE,
-        related_name='+'
+        related_name='+',
+    )
+
+
+class OtherHeadOffice(models.Model):
+    department = CrossDBOneToOneField(
+        Department,
+        on_delete=models.SET_NULL,
+        related_name='head_office',
+        null=True,
     )

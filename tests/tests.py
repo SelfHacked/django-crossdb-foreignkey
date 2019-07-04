@@ -1,6 +1,6 @@
 from django.test import TestCase
 from example_models.models import (
-    Department, OtherEmployee, OtherManager, OtherSection,
+    Department, OtherEmployee, OtherManager, OtherSection, OtherHeadOffice,
 )
 
 
@@ -33,6 +33,12 @@ class SimpleModelTest(TestCase):
         self._section = OtherSection(
             department=self._department_1,
         )
+        self._section.save()
+
+        self._headoffice = OtherHeadOffice(
+            department=self._department_1,
+        )
+        self._headoffice.save()
 
         self._department_2 = Department(code='K002')
         self._department_2.save()
@@ -93,3 +99,10 @@ class SimpleModelTest(TestCase):
         sections = OtherSection.objects.all()
 
         self.assertNotIn(self._section, sections)
+
+    def test_delete_with_null_set(self):
+        """Test delete."""
+        self._department_1.delete()
+        headoffice = OtherHeadOffice.objects.get(id=self._headoffice.id)
+
+        self.assertIsNone(headoffice.department)

@@ -1,5 +1,5 @@
 """Additional functionality to models."""
-from django.db.models import ForeignKey, OneToOneField, DO_NOTHING
+from django.db.models import ForeignKey, OneToOneField, DO_NOTHING, SET_NULL
 from django.db.models.deletion import CASCADE
 from django.db.models.signals import pre_delete
 
@@ -16,7 +16,7 @@ class CrossDBForeignKey(ForeignKey):
            since there is no good way to add custom on_delete methods.
         """
         self.internal_on_delete = kwargs.get('on_delete', CASCADE)
-        if self.internal_on_delete not in [CASCADE, DO_NOTHING]:
+        if self.internal_on_delete not in [CASCADE, DO_NOTHING, SET_NULL]:
             raise ValueError('Only CASCADE and DO_NOTHING is supported.')
             # SET_NULL is not supported at the moment.
 
@@ -45,17 +45,34 @@ class CrossDBForeignKey(ForeignKey):
 
     def execute_on_delete(self, sender, instance, **kwargs):
         """Delete related objects."""
-        on_delete = self.internal_on_delete
-        if on_delete == DO_NOTHING:
-            return
+        delete_methods = {
+            CASCADE: self._delete_for_cascade,
+            DO_NOTHING: self._delete_for_do_nothing,
+            SET_NULL: self._delete_for_set_null,
+        }
 
-        if on_delete == CASCADE:
-            related_objs = self.model.objects.filter(
-                **{
-                    f'{self.name}': instance,
-                },
-            )
-            related_objs.delete()
+        delete_methods[self.internal_on_delete](sender, instance, **kwargs)
+
+    def _delete_for_do_nothing(self, sender, instance, **kwargs):
+        pass
+
+    def _delete_for_cascade(self, sender, instance, **kwargs):
+        related_objs = self.model.objects.filter(
+            **{
+                f'{self.name}': instance,
+            },
+        )
+        related_objs.delete()
+
+    def _delete_for_set_null(self, sender, instance, **kwargs):
+        related_objs = self.model.objects.filter(
+            **{
+                f'{self.name}': instance,
+            },
+        )
+        for obj in related_objs:
+            setattr(obj, f'{self.name}', None)
+            obj.save()
 
 
 class CrossDBOneToOneField(CrossDBForeignKey, OneToOneField):
