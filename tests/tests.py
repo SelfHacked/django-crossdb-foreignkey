@@ -106,3 +106,5 @@ class SimpleModelTest(TestCase):
         headoffice = OtherHeadOffice.objects.get(id=self._headoffice.id)
 
         self.assertIsNone(headoffice.department)
+
+    # TODO: Test transaction
