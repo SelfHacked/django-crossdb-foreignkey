@@ -1,7 +1,5 @@
 from setuptools import setup, find_packages
 
-from django_crossdb_foreignkey import __version__
-
 
 extra_test = [
     'pytest>=4',
@@ -19,7 +17,7 @@ extra_ci = extra_test + [
 setup(
     name='django-crossdb-foreignkey',
 
-    version=__version__,
+    version='v0.1.0',
 
     python_requires='>=3.6',
 
