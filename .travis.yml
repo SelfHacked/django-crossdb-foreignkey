@@ -10,7 +10,7 @@ install:
   - pip install -e .[ci]
 
 script:
-  - pytest --cov --cov-report term-missing:skip-covered
+  - pytest --cov=django_crossdb_foreignkey --cov-report term-missing:skip-covered tests
 
 after_success:
   - coveralls
