@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.test import TestCase
 from example_models.models import (
     Department, OtherEmployee, OtherManager, OtherSection, OtherHeadOffice,
@@ -107,4 +108,27 @@ class SimpleModelTest(TestCase):
 
         self.assertIsNone(headoffice.department)
 
-    # TODO: Test transaction
+    def test_transaction_rollback(self):
+        """Test that transactions revert properly on error"""
+
+        try:
+            with transaction.atomic(
+                using='default',
+            ), transaction.atomic(
+                using='other',
+            ):
+                self._department_1.delete()
+
+                with self.assertRaises(Department.DoesNotExist):
+                    Department.objects.get(code='K001')
+
+                raise RuntimeError()
+        except RuntimeError:
+            pass
+
+        department = Department.objects.get(code='K001')
+        self.assertIsNotNone(department)
+
+        employees = OtherEmployee.objects.all()
+        self.assertIn(self._employee_s, employees)
+        self.assertIn(self._employee_k, employees)
