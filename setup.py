@@ -17,7 +17,7 @@ extra_ci = extra_test + [
 setup(
     name='django-crossdb-foreignkey',
 
-    version='v0.1.0',
+    version='0.1.0',
 
     python_requires='>=3.6',
 
