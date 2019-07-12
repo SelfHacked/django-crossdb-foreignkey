@@ -77,5 +77,3 @@ class CrossDBForeignKey(ForeignKey):
 
 class CrossDBOneToOneField(CrossDBForeignKey, OneToOneField):
     """Special one to one field that allows cross db relationship."""
-
-
